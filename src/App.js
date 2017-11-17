@@ -81,6 +81,7 @@ class App extends Component {
             onChange={(event) => {
               getCurrentLocation().then(coords => {
                 const { latitude, longitude } = coords;
+                console.log('heading', heading)
                 this.setState({
                   lat: latitude,
                   lng: longitude
