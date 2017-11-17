@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { getBrowserOrientation, getCurrentLocation } from './browserUtils';
+import serialize from 'serialize-javascript';
 
 class App extends Component {
 
@@ -84,13 +85,13 @@ class App extends Component {
                   lat: latitude,
                   lng: longitude
                 })
-                fetch('https://snap-a-hotel.loyaltywallet.io/', {
+                fetch('https://snap-a-hotel.loyaltywallet.io/search', {
                   method: 'POST',
-                  body: {
+                  body: serialize({
                     latitude,
                     longitude,
                     bearing: heading
-                  }
+                  })
                 }).then((data) => {
                   alert(data);
                   this.setState({ data });
