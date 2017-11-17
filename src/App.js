@@ -95,16 +95,13 @@ class App extends Component {
                 }).then((data) => {
                   alert(data);
                   this.setState({ data });
-                }).catch(err => {
-                  alert(err);
                 })
               });
             }}
           />
         </p>
-        <h1>
-          hello 1
-        </h1>
+
+        <h1>hello2</h1>
         <div>
           { data }
         </div>
