@@ -76,15 +76,16 @@ class App extends Component {
             capture="camera"
             onChange={(event) => {
               getCurrentLocation().then(coords => {
-                alert('WOOF')
-                const { lat, lng } = coords;
-                alert([lat, lng, heading])
-                // fetch('/', {
-                //   method: 'POST',
-                //   body: {
-                //     lat, lng, heading
-                //   }
-                // })
+                const { latitude, longitude } = coords;
+                alert([latitude, longitude, heading])
+                fetch('https://snap-a-hotel.loyaltywallet.io/', {
+                  method: 'POST',
+                  body: {
+                    latitude,
+                    longitude,
+                    bearing: heading
+                  }
+                })
               });
             }}
           />

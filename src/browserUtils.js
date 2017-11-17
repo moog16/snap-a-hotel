@@ -48,8 +48,8 @@ export const getCurrentLocation = () => {
         const { latitude, longitude } = position.coords;
 
         resolve({
-          lat: latitude,
-          lng: longitude
+          latitude,
+          longitude
         });
       });
     } catch(err) {
