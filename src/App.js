@@ -10,7 +10,9 @@ class App extends Component {
     this.onHeadingChange = this.onHeadingChange.bind(this);
     this.state = {
       heading: 0,
-      data: ''
+      data: '',
+      lat: null,
+      lng: null,
     };
   }
 
@@ -62,7 +64,7 @@ class App extends Component {
   }
 
   render() {
-    const { heading, data } = this.state;
+    const { heading, data, lng, lat } = this.state;
 
     return (
       <div className="App">
@@ -78,7 +80,10 @@ class App extends Component {
             onChange={(event) => {
               getCurrentLocation().then(coords => {
                 const { latitude, longitude } = coords;
-
+                this.setState({
+                  lat: latitude,
+                  lng: longitude
+                })
                 fetch('https://snap-a-hotel.loyaltywallet.io/', {
                   method: 'POST',
                   body: {
@@ -96,7 +101,18 @@ class App extends Component {
             }}
           />
         </p>
-        { data }
+        <div>
+          { data }
+        </div>
+        <div>
+          long: { lng }
+        </div>
+        <div>
+          lat: { lat }
+        </div>
+        <div>
+          heading: { heading }
+        </div>
       </div>
     );
   }
