@@ -101,10 +101,7 @@ class App extends Component {
           />
         </p>
 
-        <h1>hello2</h1>
-        <div>
-          { data }
-        </div>
+        <h1>hello3</h1>
         <div>
           long: { lng }
         </div>
