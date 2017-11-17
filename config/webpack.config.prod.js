@@ -150,7 +150,7 @@ module.exports = {
             loader: require.resolve('babel-loader'),
             options: {
 
-              compact: true,
+              compact: false,
             },
           },
           // The notation here is somewhat confusing.
@@ -181,7 +181,7 @@ module.exports = {
                       loader: require.resolve('css-loader'),
                       options: {
                         importLoaders: 1,
-                        minimize: false,
+                        minimize: true,
                         sourceMap: shouldUseSourceMap,
                       },
                     },
