@@ -92,10 +92,12 @@ class App extends Component {
                     longitude,
                     bearing: heading
                   })
-                }).then((data) => {
+                }).then((res) => {
                   console.log('MEOWMEOW')
-                  console.log(data);
-                  // this.setState({ data });
+                  res.json().then((data) => {
+                    console.log(data);
+                    this.setState({ data });
+                  })
                 })
               });
             }}
