@@ -104,9 +104,13 @@ class App extends Component {
           />
         </p>
 
-        <h1>hello4</h1>
+        <h1>hello5</h1>
         <div>
-          { data }
+          Hotel:
+          <br />
+          { data.name }
+          <br />
+          { data.id }
         </div>
         <div>
           long: { lng }
