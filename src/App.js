@@ -93,8 +93,9 @@ class App extends Component {
                     bearing: heading
                   })
                 }).then((data) => {
-                  alert(data);
-                  this.setState({ data });
+                  console.log('MEOWMEOW')
+                  console.log(data);
+                  // this.setState({ data });
                 })
               });
             }}
