@@ -102,8 +102,8 @@ class App extends Component {
             accept="image/*"
             capture="camera"
             onChange={(event) => {
-              console.log('heading1: ', heading)
-              getCurrentLocation().then(coords => this.handleLocation(coords, heading));
+              console.log('heading1: ', this.state.heading)
+              getCurrentLocation().then(coords => this.handleLocation(coords, this.state.heading));
             }}
           />
         </p>
