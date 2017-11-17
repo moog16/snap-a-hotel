@@ -64,6 +64,29 @@ class App extends Component {
     this.setState({ heading: hng });
   }
 
+  handleLocation = (coords, heading) => {
+    const { latitude, longitude } = coords;
+    console.log('heading', heading)
+    this.setState({
+      lat: latitude,
+      lng: longitude
+    })
+    fetch('https://snap-a-hotel.loyaltywallet.io/search', {
+      method: 'POST',
+      body: serialize({
+        latitude,
+        longitude,
+        bearing: heading
+      })
+    }).then((res) => {
+      console.log('MEOWMEOW')
+      res.json().then((data) => {
+        console.log(data);
+        this.setState({ data });
+      })
+    })
+  }
+
   render() {
     const { heading, data, lng, lat } = this.state;
 
@@ -79,28 +102,8 @@ class App extends Component {
             accept="image/*"
             capture="camera"
             onChange={(event) => {
-              getCurrentLocation().then(coords => {
-                const { latitude, longitude } = coords;
-                console.log('heading', heading)
-                this.setState({
-                  lat: latitude,
-                  lng: longitude
-                })
-                fetch('https://snap-a-hotel.loyaltywallet.io/search', {
-                  method: 'POST',
-                  body: serialize({
-                    latitude,
-                    longitude,
-                    bearing: heading
-                  })
-                }).then((res) => {
-                  console.log('MEOWMEOW')
-                  res.json().then((data) => {
-                    console.log(data);
-                    this.setState({ data });
-                  })
-                })
-              });
+              console.log('heading1: ', heading)
+              getCurrentLocation().then(coords => this.handleLocation(coords, heading));
             }}
           />
         </p>
