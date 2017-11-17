@@ -43,18 +43,15 @@ export const getCurrentLocation = () => {
       resolve(null);
       return;
     }
-    try {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
+    
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
 
-        resolve({
-          latitude,
-          longitude
-        });
+      resolve({
+        latitude,
+        longitude
       });
-    } catch(err) {
-      alert(err)
-    }
+    });
 
   });
 

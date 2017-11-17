@@ -87,7 +87,10 @@ class App extends Component {
                     bearing: heading
                   }
                 }).then((data) => {
+                  alert(data);
                   this.setState({ data });
+                }).catch(err => {
+                  alert(err);
                 })
               });
             }}
