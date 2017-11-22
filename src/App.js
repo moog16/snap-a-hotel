@@ -1,94 +1,55 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import logo from './assets/logo.svg';
+import CameraImg from './assets/Camera';
 import './App.css';
-import { getBrowserOrientation, getCurrentLocation } from './browserUtils';
-import serialize from 'serialize-javascript';
+import { getCurrentLocation, getHeading } from './browserUtils';
+import { fetchHotel } from './api';
+import Spinner from './Spinner';
 
 class App extends Component {
 
   constructor(props) {
     super(props);
-    this.onHeadingChange = this.onHeadingChange.bind(this);
     this.state = {
       heading: 0,
       data: '',
       lat: null,
       lng: null,
+      deviceOrientationNotSupported: false
     };
   }
 
   componentDidMount() {
-    getCurrentLocation();
-    window.addEventListener("deviceorientation", this.onHeadingChange);
-  }
-
-  onHeadingChange(event) {
-    var heading = event.alpha;
-    const { width, height } = window.screen;
-    const defaultOrientation = width > height ? 'landscape' : 'portrait';
-
-    if (typeof event.webkitCompassHeading !== "undefined") {
-      heading = event.webkitCompassHeading; //iOS non-standard
+    if (window.DeviceOrientationEvent) {
+      // https://developers.google.com/web/fundamentals/native-hardware/device-orientation/
+      window.addEventListener("deviceorientation", event => {
+        this.setState({ heading: getHeading(event) });
+      });
+    } else {
+      this.setState({
+        deviceOrientationNotSupported: true
+      });
     }
-
-    var orientation = getBrowserOrientation();
-
-    if (typeof heading === "undefined" || heading === null) return;
-
-    // what adjustment we have to add to rotation to allow for current device orientation
-    var adjustment = 0;
-    if (defaultOrientation === "landscape") {
-      adjustment -= 90;
-    }
-
-    if (typeof orientation !== "undefined") {
-      var currentOrientation = orientation.split("-");
-
-      if (defaultOrientation !== currentOrientation[0]) {
-        if (defaultOrientation === "landscape") {
-          adjustment -= 270;
-        } else {
-          adjustment -= 90;
-        }
-      }
-
-      if (currentOrientation[1] === "secondary") {
-        adjustment -= 180;
-      }
-    }
-
-    const hng = heading + adjustment;
-    const phase = hng < 0 ? 360 + hng : hng;
-    const textContent = (360 - phase | 0) + "°";
-
-    this.setState({ heading: hng });
   }
 
   handleLocation = (coords, heading) => {
     const { latitude, longitude } = coords;
-    console.log('heading', heading)
     this.setState({
       lat: latitude,
       lng: longitude
-    })
-    fetch('https://snap-a-hotel.loyaltywallet.io/search', {
-      method: 'POST',
-      body: serialize({
-        latitude,
-        longitude,
-        bearing: heading
-      })
-    }).then((res) => {
-      console.log('MEOWMEOW')
-      res.json().then((data) => {
-        console.log(data);
-        this.setState({ data });
-      })
-    })
+    });
+
+    fetchHotel(latitude, longitude, heading)
+      .then(data => {
+        if(data && data.link) {
+          document.location = data.link;
+        } else {
+          this.setState({ isFetchingHotel: false });
+        }
+      });
   }
 
   render() {
-    const { heading, data, lng, lat } = this.state;
 
     return (
       <div className="App">
@@ -96,18 +57,75 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <p className="App-intro">
+
+        { this.renderContent() }
+      </div>
+    );
+  }
+
+  renderContent() {
+    const { isFetchingHotel, deviceOrientationNotSupported } = this.state;
+
+    if(isFetchingHotel) {
+      return this.renderInterstitial();
+    }
+
+    return (
+      <div>
+        {
+          deviceOrientationNotSupported ? (
+            <div style={{ marginTop: '50px' }}>
+              Your device doesn't have a compass. Sorry!
+            </div>
+          ) : (
+            <div>
+              { this.renderCameraButton() }
+              { this.renderLocationData() }
+            </div>
+          )
+        }
+      </div>
+    )
+  }
+
+  renderInterstitial() {
+    return (
+      <div style={{ marginTop: '50px' }}>
+        <Spinner style={{ height: '50px' }}/>
+        <p style={{ color: 'grey' }}>
+          <i>Searching for your hotel...</i>
+        </p>
+      </div>
+    );
+  }
+
+  renderCameraButton() {
+    return (
+      <p className="App-intro">
+        <button onClick={event => this.inputEl.click()}>
+          <CameraImg width='100px' height='100px' />
           <input
             type="file"
             accept="image/*"
             capture="camera"
-            onChange={(event) => {
-              console.log('heading1: ', this.state.heading)
-              getCurrentLocation().then(coords => this.handleLocation(coords, this.state.heading));
+            ref={el => this.inputEl = el}
+            className='hidden'
+            onChange={event => {
+              this.setState({ isFetchingHotel: true });
+              getCurrentLocation()
+                .then(coords => this.handleLocation(coords, this.state.heading));
             }}
           />
-        </p>
+        </button>
+      </p>
+    );
+  }
 
+  renderLocationData() {
+    const { heading, data, lng, lat } = this.state;
+
+    return (
+      <div>
         <h1>hello5</h1>
         <div>
           Hotel:
