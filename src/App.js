@@ -53,11 +53,6 @@ class App extends Component {
 
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-
         { this.renderContent() }
       </div>
     );
@@ -126,7 +121,6 @@ class App extends Component {
 
     return (
       <div>
-        <h1>hello5</h1>
         <div>
           Hotel:
           <br />
