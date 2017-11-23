@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './assets/logo.svg';
 import CameraImg from './assets/Camera';
 import './App.css';
 import { getCurrentLocation, getHeading } from './browserUtils';
@@ -64,8 +63,6 @@ class App extends Component {
     if(isFetchingHotel) {
       return this.renderInterstitial();
     }
-
-    return <button> <CameraImg width='100px' height='100px' /></button>
 
     return (
       <div>
