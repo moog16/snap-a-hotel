@@ -65,6 +65,8 @@ class App extends Component {
       return this.renderInterstitial();
     }
 
+    return <button> <CameraImg width='100px' height='100px' /></button>
+
     return (
       <div>
         {
@@ -75,7 +77,6 @@ class App extends Component {
           ) : (
             <div>
               { this.renderCameraButton() }
-              { this.renderLocationData() }
             </div>
           )
         }
@@ -97,7 +98,10 @@ class App extends Component {
   renderCameraButton() {
     return (
       <p className="App-intro">
-        <button onClick={event => this.inputEl.click()}>
+        <button onClick={event => this.inputEl.click()}
+          style={{
+            backgroundColor: 'transparent'
+          }}>
           <CameraImg width='100px' height='100px' />
           <input
             type="file"
@@ -116,30 +120,6 @@ class App extends Component {
     );
   }
 
-  renderLocationData() {
-    const { heading, data, lng, lat } = this.state;
-
-    return (
-      <div>
-        <div>
-          Hotel:
-          <br />
-          { data.name }
-          <br />
-          { data.id }
-        </div>
-        <div>
-          long: { lng }
-        </div>
-        <div>
-          lat: { lat }
-        </div>
-        <div>
-          heading: { heading }
-        </div>
-      </div>
-    );
-  }
 }
 
 export default App;
